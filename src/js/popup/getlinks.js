@@ -3,28 +3,46 @@ function getLinks() {
   const iFrames = []
   const iFramesInner = []
   const videoTags = []
+  const noYTDL = []
   const filterOut = [ // does not work with YT-DL
-    "mycloud",
-    "vidzi",
-    "vidbull",
-    "fmoviesfree",
-    "vidcloud",
-    "streamcherry",
-    "vidup",
-    "vshare",
-    "thevideo",
-    "disqus"
+      'abcvideo',
+      'cloudvideo',
+      'dood',
+      'fmoviesfree',
+      'gamovideo',
+      'jetload',
+      'mycloud',
+      'mystream',
+      'powvideo',
+      'streamcherry',
+      'streamplay',
+      'streamtape',
+      'supervideo',
+      'thevideo',
+      'upstream',
+      'vev',
+      'videobin',
+      'vidbull',
+      'vidcloud',
+      'vidia',
+      'vidlox',
+      'vidoza',
+      'vidup',
+      'vidzi',
+      'vshare',
+      'disqus',
+      'twitter'
   ]
 
   Array.from(document.getElementsByTagName('iframe'))
     .forEach((iframe) => {
       let src = iframe.src || ''
       let filtered = filterOut.find(filter => src.includes(filter))
-      filtered ? iFrames.push(`NO YT-DL!: ${src}`) : iFrames.push(src)
+      filtered ? noYTDL.push(src) : iFrames.push(src)
       if (iframe.contentDocument && iframe.contentDocument.querySelector('iframe')) {
         let innerSrc = iframe.contentDocument.querySelector('iframe').src
         let filtered = filterOut.find(filter => innerSrc.includes(filter))
-        filtered ? iFramesInner.push(`NO YT-DL!: ${innerSrc}`) : iFramesInner.push(innerSrc)
+        filtered ? noYTDL.push(innerSrc) : iFramesInner.push(innerSrc)
       }
     })
 
@@ -45,7 +63,11 @@ function getLinks() {
         source = el.src
         console.log('el.src')
       }
-      videoTags.push(source)
+
+      let filtered = filterOut.find(filter => source.includes(filter))
+      filtered ? noYTDL.push(source) : videoTags.push(source)
+
+
       console.log(source)
     })
 
@@ -82,10 +104,11 @@ function getLinks() {
   chrome.runtime.sendMessage({
     iFrames,
     iFramesInner,
-    videoTags
+    videoTags,
+    noYTDL
   }, function(response) {
     console.log(response)
-  });
+  })
 }
 
 export default getLinks

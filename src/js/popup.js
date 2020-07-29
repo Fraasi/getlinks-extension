@@ -22,13 +22,13 @@ chrome.runtime.onMessage.addListener(
       "from the extension")
     if (request.iFrames) {
       console.log('request:', request)
-      sendResponse({ farewell: "goodbye" })
+      // sendResponse({ farewell: "goodbye" })
 
       // put stuff in popup
       Object.keys(request)
         .forEach(key => {
           document.querySelector('.'+key)
-            .innerHTML = request[key].join('<br>')
+            .innerHTML += request[key].join('<br>')
         })
     }
   })

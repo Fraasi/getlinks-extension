@@ -14,6 +14,17 @@
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.primewire.li/*"
+      ],
+      "js": [
+        "primewire.bundle.js"
+      ]
+    }
   ]
 }
