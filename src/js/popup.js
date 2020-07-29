@@ -10,7 +10,7 @@ document.querySelector('img').addEventListener('click', () => {
   document.querySelector('h1').innerText = 'goodbye'
   chrome.tabs.executeScript({
     code: `(${getLinks.toString()})()`
-    //   file: '/js/getlinks.js'
+      // file: '/js/getlinks.js'
   })
 
 })
@@ -32,3 +32,11 @@ chrome.runtime.onMessage.addListener(
         })
     }
   })
+
+  document.querySelector('#go-to-options').addEventListener('click', function() {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      window.open(chrome.runtime.getURL('options.html'));
+    }
+  });
