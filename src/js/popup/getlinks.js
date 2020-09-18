@@ -5,33 +5,33 @@ function getLinks() {
   const videoTags = []
   const noYTDL = []
   const filterOut = [ // does not work with YT-DL
-      'abcvideo',
-      'cloudvideo',
-      'dood',
-      'fmoviesfree',
-      'gamovideo',
-      'jetload',
-      'mycloud',
-      'mystream',
-      'powvideo',
-      'streamcherry',
-      'streamplay',
-      'streamtape',
-      'supervideo',
-      'thevideo',
-      'upstream',
-      'vev',
-      'videobin',
-      'vidbull',
-      'vidcloud',
-      'vidia',
-      'vidlox',
-      'vidoza',
-      'vidup',
-      'vidzi',
-      'vshare',
-      'disqus',
-      'twitter'
+    'abcvideo',
+    'cloudvideo',
+    'dood',
+    'fmoviesfree',
+    'gamovideo',
+    'jetload',
+    'mycloud',
+    'mystream',
+    'powvideo',
+    'streamcherry',
+    'streamplay',
+    'streamtape',
+    'supervideo',
+    'thevideo',
+    'upstream',
+    'vev',
+    'videobin',
+    'vidbull',
+    'vidcloud',
+    'vidia',
+    'vidlox',
+    'vidoza',
+    'vidup',
+    'vidzi',
+    'vshare',
+    'disqus',
+    'twitter'
   ]
 
   Array.from(document.getElementsByTagName('iframe'))
@@ -46,29 +46,28 @@ function getLinks() {
       }
     })
 
-  console.log('Iframe source(s):')
-  iFrames.forEach(src => { console.log(src) })
-  console.log('Iframe inner source(s):')
-  iFramesInner.forEach(src => { console.log(src) })
+  // console.log('Iframe source(s):')
+  // iFrames.forEach(src => { console.log(src) })
+  // console.log('Iframe inner source(s):')
+  // iFramesInner.forEach(src => { console.log(src) })
 
   //rewrite when you stumble upon a video tag again
-  console.log('Video source(s)')
+  // console.log('Video source(s)')
   Array.from(document.getElementsByTagName('video'))
     .forEach((el) => {
       let source = 'No el.src || <source>'
       if (!el.src && el.firstElementChild) {
         source = el.firstElementChild.src
-        console.log('el.first...')
+        // console.log('el.first...')
       } else if (el.src) {
         source = el.src
-        console.log('el.src')
+        // console.log('el.src')
       }
 
       let filtered = filterOut.find(filter => source.includes(filter))
       filtered ? noYTDL.push(source) : videoTags.push(source)
 
-
-      console.log(source)
+      // console.log(source)
     })
 
 
@@ -106,7 +105,7 @@ function getLinks() {
     iFramesInner,
     videoTags,
     noYTDL
-  }, function(response) {
+  }, function (response) {
     console.log(response)
   })
 }
