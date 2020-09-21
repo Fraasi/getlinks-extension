@@ -6,22 +6,14 @@
 </head>
 <body>
   options
-  Favorite color:
-<select id="color">
- <option value="red">red</option>
- <option value="green">green</option>
- <option value="blue">blue</option>
- <option value="yellow">yellow</option>
-</select>
 
 <label>
-  <input type="checkbox" id="like">
-  I like colors.
-</label>
-
-<label>
-  Filter list
   <textarea name="filterlist" id="filterlist" cols="30" rows="10"></textarea>
+  Filter list.<br />
+  Put sites here that doesn't work with youtube-dl.
+  One at a line.
+  Click the button to copy the list as an javascript array to your clipboard.
+  <button id="get-list">get list</button>
 </label>
 
 <div id="status"></div>

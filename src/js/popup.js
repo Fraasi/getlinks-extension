@@ -1,21 +1,28 @@
 import "../css/popup.css";
 import getLinks from './popup/getlinks.js'
+import copyImg from '../img/clipboard.svg'
+console.log('copyImg:', copyImg)
 
-// console.log('getLinks:', getLinks.toString())
-// console.log(process.cwd())
-// const uu = chrome.runtime.getURL('popup/getlinks.js')
 
 document.addEventListener('DOMContentLoaded', function () {
   /* Add your event listeners here */
   chrome.tabs.executeScript({
     code: `(${getLinks.toString()})()`
   })
-});
+
+  document.querySelector('#options').addEventListener('click', function () {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      window.open(chrome.runtime.getURL('options.html'));
+    }
+  })
+})
 
 
 chrome.runtime.onMessage.addListener(
   function (message, sender, sendResponse) {
-    console.log('message:', message)
+    // console.log('message:', message)
     console.log(sender.tab ?
       "from a content script:" + sender.tab.url :
       "from the extension")
@@ -28,6 +35,11 @@ chrome.runtime.onMessage.addListener(
               if (e.target.tagName === 'BUTTON') {
                 const link = e.target.getAttribute('data-link')
                 navigator.clipboard.writeText(link)
+                const link_span = document.querySelector((`span[data-link="${link}"]`))
+                link_span.innerHTML = 'Copied to clipboard<br>'
+                setTimeout(function() {
+                  link_span.innerHTML = `${link}<br>`;
+                }, 750);
               }
             })
             message[key].forEach(link => {
@@ -35,19 +47,12 @@ chrome.runtime.onMessage.addListener(
               button.setAttribute('type', 'button')
               button.setAttribute('class', 'copy-to-clipboard')
               button.setAttribute('data-link', link)
-              button.textContent = 'copy'
               el.append(button)
-              // el.textContent += link
-              el.innerHTML += `&nbsp;${link}<br>`
+              const span = document.createElement('span')
+              span.setAttribute('data-link', link)
+              span.innerHTML = `${link}<br>`
+              el.append(span)
             })
           }
         })
   })
-
-document.querySelector('#options').addEventListener('click', function () {
-  if (chrome.runtime.openOptionsPage) {
-    chrome.runtime.openOptionsPage();
-  } else {
-    window.open(chrome.runtime.getURL('options.html'));
-  }
-});

@@ -55,7 +55,7 @@ function getLinks() {
   // console.log('Video source(s)')
   Array.from(document.getElementsByTagName('video'))
     .forEach((el) => {
-      let source = 'No el.src || <source>'
+      let source = 'No el.src || &lt;source&gt;'
       if (!el.src && el.firstElementChild) {
         source = el.firstElementChild.src
         // console.log('el.first...')
