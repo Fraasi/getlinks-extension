@@ -4,6 +4,8 @@ function getLinks() {
   const iFramesInner = []
   const videoTags = []
   const noYTDL = []
+  const m3u8s = []
+
   const filterOut = [ // does not work with YT-DL
     'abcvideo',
     'cloudvideo',
@@ -30,17 +32,30 @@ function getLinks() {
     'vidup',
     'vidzi',
     'vshare',
-    'disqus',
-    'twitter'
   ]
+
+  const toRemove = [
+    'disqus',
+    'twitter',
+    'google'
+  ]
+
+  function remove(str) {
+    return toRemove.some(el => {
+      const regex = new RegExp(el)
+      return regex.test(str)
+    })
+
+  }
 
   Array.from(document.getElementsByTagName('iframe'))
     .forEach((iframe) => {
-      let src = iframe.src || ''
+      let src = remove(iframe.src) ? '' : iframe.src
       let filtered = filterOut.find(filter => src.includes(filter))
       filtered ? noYTDL.push(src) : iFrames.push(src)
       if (iframe.contentDocument && iframe.contentDocument.querySelector('iframe')) {
         let innerSrc = iframe.contentDocument.querySelector('iframe').src
+        innerSrc = remove(innerSrc) ? '' : innerSrc
         let filtered = filterOut.find(filter => innerSrc.includes(filter))
         filtered ? noYTDL.push(innerSrc) : iFramesInner.push(innerSrc)
       }
@@ -85,29 +100,28 @@ function getLinks() {
   // }
 
 
-  function captureNetworkRequest(ee) {
-    var capture_newtwork_request = [];
-    var capture_resource = performance.getEntriesByType("resource");
-    for (var i = 0; i < capture_resource.length; i++) {
-      if (capture_resource[i].initiatorType == "xmlhttprequest" || capture_resource[i].initiatorType == "iframe") {
-
-        capture_newtwork_request.push(capture_resource[i])
-
-      }
+  // captureNetworkRequests, ie. m3u8's
+  const captured_resources = performance.getEntriesByType("resource");
+  for (let i = 0; i < captured_resources.length; i++) {
+    if (captured_resources[i].initiatorType == "xmlhttprequest"
+      && (captured_resources[i].name.includes('m3u8')
+        || captured_resources[i].name.includes('mpd'))
+    ) {
+      m3u8s.push(captured_resources[i].name)
     }
-    return capture_newtwork_request
   }
 
-  //console.log(captureNetworkRequest())
 
   chrome.runtime.sendMessage({
     iFrames,
     iFramesInner,
     videoTags,
+    m3u8s,
     noYTDL
   }, function (response) {
     console.log(response)
   })
+
 }
 
 export default getLinks
