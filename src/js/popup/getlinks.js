@@ -10,7 +10,9 @@ function getLinks() {
     'disqus',
     'twitter',
     'google',
-    'facebook'
+    'facebook',
+    'about:blank',
+    'data:text'
   ]
 
   function remove(str) {
@@ -34,24 +36,22 @@ function getLinks() {
   //rewrite when you stumble upon a video tag again
   Array.from(document.getElementsByTagName('video'))
     .forEach((el) => {
-      let source = 'No el.src || &lt;source&gt;'
+      let source = null
       if (!el.src && el.firstElementChild) {
         source = el.firstElementChild.src
       } else if (el.src) {
         source = el.src
       }
-      if (source !== null) videoTags.push(source)
+      if (source) videoTags.push(source)
     })
 
 
   // captureNetworkRequests, ie. m3u8's
-  const captured_resources = performance.getEntriesByType("resource");
-  for (let i = 0; i < captured_resources.length; i++) {
-    if (captured_resources[i].initiatorType == "xmlhttprequest"
-      && (captured_resources[i].name.includes('m3u8')
-        || captured_resources[i].name.includes('mpd'))
-    ) {
-      m3u8s.push(captured_resources[i].name)
+  const captured_resources = performance.getEntriesByType("resource")
+  for (let resource of captured_resources) {
+    if (resource.initiatorType === 'xmlhttprequest'
+      && resource.name.includes('m3u8')) {
+      m3u8s.push(resource.name)
     }
   }
 
@@ -59,8 +59,8 @@ function getLinks() {
   chrome.runtime.sendMessage({
     iFrames,
     iFramesInner,
-    videoTags,
-    m3u8s,
+    videoTags: [...new Set(videoTags) ],
+    m3u8s: [ ...new Set(m3u8s) ],
   }, function (response) {
     console.log(response)
   })
