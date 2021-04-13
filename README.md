@@ -1,4 +1,15 @@
 # Getlinks-extension
+
+Simple & crude chrome extension to get the 'underlining' real video url that works with yt-dl.
+
+If you want to try this:
+* clone the repo 
+* install dependencies
+* run the build script, `npm run build`
+* go to chrome extension page, check developer mode, click `load unpacked` & choose the generated `build` folder
+
+------------
+
  Bootstrapped with [Chrome Extension Webpack Boilerplate](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate/)
 
 
@@ -12,11 +23,8 @@ All your extension's development code must be placed in `src` folder, including 
 
 The boilerplate is already prepared to have a popup, a options page and a background page. You can easily customize this.
 
-Each page has its own [assets package defined](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate/blob/master/webpack.config.js#L16-L20). So, to code on popup you must start your code on `src/js/popup.js`, for example.
-
-
 ## Webpack auto-reload and HRM
-To make your workflow much more efficient this boilerplate uses the [webpack server](https://webpack.github.io/docs/webpack-dev-server.html) to development (started with `yarn run server`) with auto reload feature that reloads the browser automatically every time that you save some file o your editor.
+To make your workflow much more efficient this boilerplate uses the [webpack server](https://webpack.github.io/docs/webpack-dev-server.html) to development (started with `yarn run server`) with auto reload feature that reloads the browser automatically every time that you save some file on your editor.
 
 You can run the dev mode on other port if you want. Just specify the env var `port` like this:
 

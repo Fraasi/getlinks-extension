@@ -17,24 +17,5 @@
     "activeTab",
     "storage"
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "https://www.primewire.li/*",
-        "https://www.primewire.ag/*",
-        "https://www.primewire.vc/*"
-      ],
-      "js": [
-        "primewire.bundle.js"
-      ]
-    },
-    {
-      "matches": [
-        "*://*.putlockers.fm/watch/*"
-      ],
-      "js": [
-        "putlocker.bundle.js"
-      ]
-    }
-  ]
+  "content_scripts": []
 }
