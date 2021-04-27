@@ -5,7 +5,6 @@ function getLinks() {
   const videoTags = []
   const m3u8s = []
 
-
   const filterOut = [
     'disqus',
     'twitter',
@@ -22,7 +21,6 @@ function getLinks() {
       return regex.test(str)
     })
   }
-
 
   Array.from(document.getElementsByTagName('iframe'))
     .forEach((iframe) => {
@@ -45,7 +43,6 @@ function getLinks() {
       if (source) videoTags.push(source)
     })
 
-
   // captureNetworkRequests, ie. m3u8's
   const captured_resources = performance.getEntriesByType("resource")
   for (let resource of captured_resources) {
@@ -55,12 +52,11 @@ function getLinks() {
     }
   }
 
-
   chrome.runtime.sendMessage({
     iFrames,
     iFramesInner,
-    videoTags: [...new Set(videoTags) ],
-    m3u8s: [ ...new Set(m3u8s) ],
+    videoTags,
+    m3u8s,
   }, function (response) {
     console.log(response)
   })
