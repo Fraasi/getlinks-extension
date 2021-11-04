@@ -11,7 +11,8 @@ function getLinks() {
     'google',
     'facebook',
     'about:blank',
-    'data:text'
+    'data:text',
+    'chrome-extension',
   ]
 
   function remove(str) {
