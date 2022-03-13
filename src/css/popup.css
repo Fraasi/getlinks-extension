@@ -1,3 +1,9 @@
+html, body {
+  min-height: 200px;
+  max-height: 450px;
+  overflow: scroll; /* has to be on both to prevent going off screen */
+}
+
 body {
   /* background-color: #000000; */
   width: 350px;

@@ -2,9 +2,10 @@ import "../css/popup.css";
 import getLinks from './popup/getlinks.js'
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function(details) {
 
-  chrome.tabs.executeScript({
+  chrome.tabs.executeScript(
+    details.tabId, {
     code: `(${getLinks.toString()})()`,
     allFrames: true,
   })
