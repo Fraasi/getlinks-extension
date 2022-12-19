@@ -1,11 +1,11 @@
 var webpack = require("webpack"),
-    path = require("path"),
-    fileSystem = require("fs"),
-    env = require("./utils/env"),
-    CleanWebpackPlugin = require("clean-webpack-plugin").CleanWebpackPlugin,
-    CopyWebpackPlugin = require("copy-webpack-plugin"),
-    HtmlWebpackPlugin = require("html-webpack-plugin"),
-    WriteFilePlugin = require("write-file-webpack-plugin");
+  path = require("path"),
+  fileSystem = require("fs"),
+  env = require("./utils/env"),
+  CleanWebpackPlugin = require("clean-webpack-plugin").CleanWebpackPlugin,
+  CopyWebpackPlugin = require("copy-webpack-plugin"),
+  HtmlWebpackPlugin = require("html-webpack-plugin"),
+  WriteFilePlugin = require("write-file-webpack-plugin");
 
 // load the secrets
 var alias = {};
@@ -27,18 +27,23 @@ var options = {
   },
   output: {
     path: path.join(__dirname, "build"),
-    filename: "[name].bundle.js"
+    filename: "[name].bundle.js",
+    assetModuleFilename: '[name][ext][query]'
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader",
+        use: ["style-loader", "css-loader"],
         exclude: /node_modules/
       },
       {
         test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
-        loader: "file-loader?name=[name].[ext]",
+        // loader: "file-loader?name=[name].[ext]",
+        //use: [{
+        //   loader: "file-loader"
+        // }],
+        type: "asset/resource",
         exclude: /node_modules/
       },
       {
@@ -55,18 +60,22 @@ var options = {
     // clean the build folder
     new CleanWebpackPlugin(),
     // expose and write the allowed env vars on the compiled bundle
-    new webpack.EnvironmentPlugin({NODE_ENV: 'development'}),
-    new CopyWebpackPlugin([{
-      from: "src/manifest.json",
-      transform: function (content, path) {
-        // generates the manifest file using the package.json informations
-        return Buffer.from(JSON.stringify({
-          description: process.env.npm_package_description,
-          version: process.env.npm_package_version,
-          ...JSON.parse(content.toString())
-        }))
-      }
-    }]),
+    new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
+    new CopyWebpackPlugin({
+      patterns: [{
+        from: "src/manifest.json",
+        transform: {
+          transformer(content, absoluteFrom) {
+            // generates the manifest file using the package.json informations
+            return Buffer.from(JSON.stringify({
+              description: process.env.npm_package_description,
+              version: process.env.npm_package_version,
+              ...JSON.parse(content.toString())
+            }))
+          }
+        }
+      }]
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "popup.html"),
       filename: "popup.html",
@@ -87,7 +96,7 @@ var options = {
 };
 
 if (env.NODE_ENV === "development") {
-  options.devtool = "cheap-module-eval-source-map";
+  options.devtool = "eval-cheap-module-source-map";
 }
 
 module.exports = options;
