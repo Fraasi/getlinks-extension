@@ -1,9 +1,9 @@
 function getLinks() {
 
-  const iFrames = []
-  const iFramesInner = []
   const videoTags = []
   const m3u8s = []
+  const iFrames = []
+  const iFramesInner = []
 
   const filterOut = [
     'disqus',
